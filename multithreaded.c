@@ -184,11 +184,8 @@ void worker_behavior(int *id){
 
                 // If child object is a file (Case 3.2)
                 case DT_REG:
-                // Invoke grep - edit size of grep command based on size of search_string (might need to malloc this)
-
-                // form full grep command
-                // grep "search_string" "absolute_path" > /dev/null
-                //char grep_command[500] = "grep ";
+                // Invoke grep
+                // form full grep command = grep "search_string" "absolute_path" > /dev/null
                 char *grep_command = malloc(sizeof(char) * 50 + strlen(search_string) + strlen(absolute_path));
                 grep_command[0] = '\0';
                 strcat(grep_command, "grep ");
