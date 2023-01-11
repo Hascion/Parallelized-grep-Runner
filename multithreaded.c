@@ -147,7 +147,7 @@ void worker_behavior(int *id){
 
         // Iterate through the entries in the directory
         while(1){
-            // Invokes readdir, obtaining a new child object
+            // Invokes readdir, obtaining a new child objectww
             struct dirent *entry = readdir(curr_dir);
 		    if (entry == NULL) break;
             
@@ -171,12 +171,13 @@ void worker_behavior(int *id){
             switch(entry->d_type){
                 // If child object is DIRECTORY (Case 3.1)
                 case DT_DIR:
-                // Make sure that file is not hidden or . or ..
-                if (entry->d_name[0] != '.') {
+                // Make sure that directory is not . or ..
+                // strcmp returns 0 if equal, and a non-zero integer if non-equal
+                if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
                     printf("[%d] ENQUEUE %s\n", workerID, absolute_path);
                     task_queue_enqueue(queue, absolute_path);
                 } else {
-                    // if . or .. or hidden file, ignore them; absolute path freed since it is unused
+                    // if directory name is . or .., ignore
                     free(absolute_path);
                 }
                 break;
