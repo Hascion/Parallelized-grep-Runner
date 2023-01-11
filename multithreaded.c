@@ -187,14 +187,23 @@ void worker_behavior(int *id){
                 // Invoke grep - edit size of grep command based on size of search_string (might need to malloc this)
 
                 // form full grep command
-                char grep_command[500] = "grep ";
+                // grep "search_string" "absolute_path" > /dev/null
+                //char grep_command[500] = "grep ";
+                char *grep_command = malloc(sizeof(char) * 50 + strlen(search_string) + strlen(absolute_path));
+                grep_command[0] = '\0';
+                strcat(grep_command, "grep ");
                 strcat(grep_command, "\"");
                 strcat(grep_command, search_string);
                 strcat(grep_command, "\" ");
+                strcat(grep_command, "\"");
                 strcat(grep_command, absolute_path);
+                strcat(grep_command, "\" ");
                 // redirect output to /dev/null
-                strcat(grep_command, " > /dev/null");
+                strcat(grep_command, "> /dev/null");
+
+                // execute grep using system
                 int grep_status = system(grep_command);
+                free(grep_command);
                 
                 // check return value of system function to see error code (exit status is 0 if string is found, 1 otherwise)
                 if (grep_status == 0){
