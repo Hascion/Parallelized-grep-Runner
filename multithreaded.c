@@ -147,7 +147,7 @@ void worker_behavior(int *id){
 
         // Iterate through the entries in the directory
         while(1){
-            // Invokes readdir, obtaining a new child objectww
+            // Invokes readdir, obtaining a new child object
             struct dirent *entry = readdir(curr_dir);
 		    if (entry == NULL) break;
             
