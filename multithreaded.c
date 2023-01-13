@@ -114,12 +114,12 @@ void worker_behavior(int *id){
     while(1){
         // dequeues from the task queue, sets value of curr_task
         // returned status indicates success or failure of dequeue operation
+        // acquires thread_statuses lock
+        sem_wait(&thread_statuses_lock);
         int status = task_queue_dequeue(queue, curr_task);
 
         // If dequeue operation fails, then the queue is empty (Case 1)
         if (status < 0) {
-            // acquires thread_statuses lock - ensure that thread_statuses is not modified while all_done_checker is active
-            sem_wait(&thread_statuses_lock);
             if (all_done_checker() < 0){
                 // if all_done_checker returns -1, at least 1 thread is still running and that means there is a possibility that
                 // a new task will be enqueued
@@ -135,7 +135,6 @@ void worker_behavior(int *id){
         
         // If dequeue operation is successful, then a new task is obtained (Case 2)
         // Set thread status in thread_statuses to 1 indicating that it is currently working on a task
-        sem_wait(&thread_statuses_lock);
         thread_statuses[workerID] = 1;
         sem_post(&thread_statuses_lock);
         
